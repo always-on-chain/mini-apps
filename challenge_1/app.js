@@ -26,18 +26,32 @@ var checkSpot = function() {
   for (var i = 0; i < gameboard.length; i++) {
     var row = gameboard[i]
     for (var j = 0; j < row.length; j++) {
-      if (row[j] === null && playerX.turn) {
-        row[j] = playerX.piece;
-        playerX.turn = false;
-      } else if (row[j] === null && playerO.turn) {
-        row[j] = playerO.piece;
-        playerO.turn = false;
+      if (row[j] === null) {
+        if (playerX.turn) {
+          row[j] = playerX.piece;
+          playerX.turn = !playerX.turn;
+          playerO.turn = !playerO.turn;
+        } else if (playerO.turn) {
+          row[j] = playerO.piece;
+          playerO.turn = !playerO.turn;
+          playerX.turn = !playerX.turn;
+        }
       }
     }
   }
 }
 
-checkSpot();
+var clickHandler = function(id) {
+  if (playerX.turn) {
+    document.getElementById(id).innerHTML = 'X';
+    playerX.turn = !playerX.turn;
+    playerO.turn = !playerO.turn;
+  } else if (playerO.turn) {
+    document.getElementById(id).innerHTML = 'O';
+    playerO.turn = !playerO.turn;
+    playerX.turn = !playerX.turn;
+  }
+}
 
 
 

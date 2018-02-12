@@ -2,9 +2,16 @@
   margin-left: 15%;
   height: 900px; 
   width: 900px;
-  background-color: blue;
+  background-color: tan;
+}
+
+h1 {
+  text-align: auto,
 }
 
 td {
-  border: 1px solid #cecfd5;
+  border: 1px solid black;
+  text-align: center;
+  font-size: 100px; 
 }
+
