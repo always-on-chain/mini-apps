@@ -53,6 +53,13 @@ var clickHandler = function(id) {
   }
 }
 
+var restartBoard = function(name) {
+  var dom =  document.getElementsByClassName(name);
+  for (var i = 0; i < dom.length; i++) {
+    document.getElementsByClassName(name)[i].innerHTML = '';
+  }
+}
+
 
 
 
