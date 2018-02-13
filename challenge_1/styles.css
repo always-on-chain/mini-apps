@@ -1,7 +1,7 @@
 .board {
   margin-left: 15%;
-  height: 900px; 
-  width: 900px;
+  height: 600px; 
+  width: 600px;
   background-color: tan;
 }
 
@@ -12,6 +12,8 @@ h1 {
 td {
   border: 1px solid black;
   text-align: center;
-  font-size: 100px; 
+  font-size: 60px; 
+  height: 200px;
+  width: 200px;
 }
 
