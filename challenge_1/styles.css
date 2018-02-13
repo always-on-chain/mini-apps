@@ -1,12 +1,14 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .board {
-  margin-left: 15%;
   height: 600px; 
   width: 600px;
   background-color: tan;
-}
-
-h1 {
-  text-align: auto,
 }
 
 td {
@@ -16,4 +18,5 @@ td {
   height: 200px;
   width: 200px;
 }
+
 

@@ -9,14 +9,17 @@ var playerX= {
   model: 1,
   dom: 'X',
   turn: true,
-  winner: false
-}
+  winner: false,
+  score: 0
+};
+
 var playerO = {
   model: 2,
   dom: 'O',
   turn: false,
-  winner: false
-}
+  winner: false,
+  score: 0
+};
 
 var changeModel = function(elementID, dom, model) {
   var element = document.getElementById(elementID);
@@ -51,9 +54,6 @@ var restartBoard = function(name) {
   for (var i = 0; i < rows.length; i++) {
     document.getElementsByClassName(name)[i].innerHTML = '';
   }
-  for (var spot in gameboard) {
-    gameboard[spot] = null;
-  }
   gameboard = [
     ['row-1-col-1', 'row-1-col-2', 'row-1-col-3'],
     ['row-2-col-1', 'row-2-col-2', 'row-2-col-3'],
@@ -61,12 +61,20 @@ var restartBoard = function(name) {
   ]
   playerX.winner = false;
   playerO.winner = false;
+  playerX.turn = true;
+  playerO.turn = false;
+  playerX.score = 0;
+  playerO.score = 0;
+  document.getElementById("player-x-score").innerHTML = "Player X Score : 0";
+  document.getElementById("player-o-score").innerHTML = "Player O Score : 0";
 }
 
 var checkForWinner = function() {
   checkRows();
   checkCols();
   checkDiagonals();
+  document.getElementById("player-x-score").innerHTML = "Player X Score : " + playerX.score;
+  document.getElementById("player-o-score").innerHTML = "Player O Score : " + playerO.score;
 }
 
 var checkCols = function() {
@@ -76,29 +84,57 @@ var checkCols = function() {
       col += gameboard[j][i];
     }
     if (col === 3 && !playerX.winner) {
-      playerX.winner = !playerX.winner
-      console.log('PLAYER 1 wins!')
+      playerX.winner = !playerX.winner;
+      playerX.score = playerX.score + 1;
+      console.log('PLAYER 1 wins!');
+      setTimeout(function() {
+        restartBoard('spots');
+      }, 1000);
     }
     if (col === 6 && !playerO.winner) {
-      playerO.winner = !playerO.winner
-      console.log('PLAYER 2 wins!')
+      playerO.winner = !playerO.winner;
+      playerO.score = playerO.score + 1;
+      console.log('PLAYER 2 wins!');
+      setTimeout(function() {
+        restartBoard('spots')
+      }, 1000);
     }
     col = 0;
   }
 }
 
 var checkDiagonals = function() {
-  if (gameboard[0][0] + gameboard[1][1] + gameboard[2][2] === 3) {
-    console.log('PLAYER 1 wins!')
+  if (gameboard[0][0] + gameboard[1][1] + gameboard[2][2] === 3 && !playerX.winner) {
+    playerX.winner = !playerX.winner;
+    playerX.score = playerX.score + 1;
+    console.log('PLAYER 1 wins!');
+    setTimeout(function() {
+      restartBoard('spots')
+    }, 1000);
   }
-  if (gameboard[0][0] + gameboard[1][1] + gameboard[2][2] === 6) {
-    console.log('PLAYER 2 wins!')
+  if (gameboard[0][0] + gameboard[1][1] + gameboard[2][2] === 6 && !playerO.winner) {
+    playerO.winner = !playerO.winner;
+    playerO.score = playerO.score + 1;
+    console.log('PLAYER 2 wins!');
+    setTimeout(function() {
+      restartBoard('spots')
+    }, 1000);
   }
-  if (gameboard[0][2] + gameboard[1][1] + gameboard[2][0] === 3) {
-    console.log('PLAYER 1 wins!')
+  if (gameboard[0][2] + gameboard[1][1] + gameboard[2][0] === 3 && !playerX.winner) {
+    playerX.winner = !playerX.winner;
+    playerX.score = playerX.score + 1;
+    console.log('PLAYER 1 wins!');
+    setTimeout(function() {
+      restartBoard('spots')
+    }, 1000);
   }
-  if (gameboard[0][2] + gameboard[1][1] + gameboard[2][0] === 6) {
-    console.log('PLAYER 2 wins!')
+  if (gameboard[0][2] + gameboard[1][1] + gameboard[2][0] === 6 && !playerO.winner) {
+    playerO.winner = !playerO.winner;
+    playerO.score = playerO.score + 1;
+    console.log('PLAYER 2 wins!');
+    setTimeout(function() {
+      restartBoard('spots')
+    }, 1000);
   }
 }
 
@@ -109,12 +145,20 @@ var checkRows = function() {
       row += gameboard[i][j];
     }
     if (row === 3 && !playerX.winner) {
-      playerX.winner = !playerX.winner
-      console.log('PLAYER 1 wins!')
+      playerX.winner = !playerX.winner;
+      playerX.score = playerX.score + 1;
+      console.log('PLAYER 1 wins!');
+      setTimeout(function() {
+        restartBoard('spots')
+      }, 1000);
     }
     if (row === 6 && !playerO.winner) {
-      playerO.winner = !playerO.winner
-      console.log('PLAYER 2 wins!')
+      playerO.winner = !playerO.winner;
+      playerO.score = playerO.score + 1;
+      console.log('PLAYER 2 wins!');
+      setTimeout(function() {
+        restartBoard('spots')
+      }, 1000);
     }
     row = 0;
   }
