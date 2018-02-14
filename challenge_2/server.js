@@ -3,17 +3,11 @@ var bodyParser = require('body-parser');
 var app = express();
 
 app.use(express.static('client'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-app.get('/', function(req, res) {
-  console.log(req)
-  res.send('req');
-})
+app.use(bodyParser.json());
 
 app.post('/', function(req, res) {
-  // res.setHeader('Content-Type', 'application/json');
+  // res.writeHead('Content-Type', 'application/json');
+  // console.log(_.escape(req.body));
   res.send(req.body);
 })
 
@@ -22,3 +16,4 @@ app.post('/', function(req, res) {
 app.listen(3000, function() {
   console.log('listening');
 });
+

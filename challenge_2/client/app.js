@@ -2,51 +2,66 @@
 //Model
 var app = {
   server: 'http://localhost:3000',
-  send: function(data) {
+  send: function(input) {
     $.ajax({
       url: app.server,
       type: 'POST',
-      data: data,
+      data: input,
+      contentType: 'application/json',
       success: function(data) {
-        console.log('SUCCESS!', data)
+        $('#text').append($("<div>"+getHeaders(data)+"</div>"));
+
+        var parsedData = parseData(data).split('\n');
+        for (var i = 0; i < parsedData.length; i++) {
+          $('#text').append($("<div>"+parsedData[i]+"</div>"));
+        }
       },
       error: function(error) {
         console.log('error', error);
       }
     })
-  },
-  fetch: function() {
-    $.ajax({
-      url: app.server,
-      type: 'GET',
-      data: data,
-      success: function(data) {
-        console.log(data);
-      },
-      error: function(error) {
-        console.error('Failed to fetch messages', error);
-      }
-    })
-  },
-  sendData: function() {
-    var data = $('#data').val();
-    console.log(data);
-    app.send(data);
-  },
-
+  }
 } 
 
 //Control
-// var sendData = function() {
-//   var data = $('#data').val();
-//   console.log('hi')
-//   app.send(data);
-// }
-
-
+var sendData = function() {
+  var data = $('#data').val();
+  app.send(data);
+}
+  //Handlers
 $('#submit').on('click', function() {
-  app.sendData();
+  sendData();
 });
+
+var getHeaders = function(data) {
+  var headers = '';
+  for (var prop in data) {
+    if (prop !== 'children') {
+      headers +=  prop + ',';
+    }
+  }
+  headers = headers.slice(0, -1);
+  return headers;
+}
+
+var parseData = function(data) {
+  var csv = '';
+
+  for (var prop in data) {
+    if (prop !== 'children') {
+      csv += data[prop] + ',';
+    }
+  }
+  csv = csv.slice(0, -1);
+  csv += '\n';
+
+  if (data.children.length > 0) {
+    for (var i = 0; i < data.children.length; i++) {
+      csv += parseData(data.children[i]);
+    }
+  }
+  return csv;
+}
 
 //View
 // var renderData = function(data) {
