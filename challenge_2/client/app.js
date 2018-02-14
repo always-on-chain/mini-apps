@@ -9,12 +9,7 @@ var app = {
       data: input,
       contentType: 'application/json',
       success: function(data) {
-        $('#text').append($("<div>"+getHeaders(data)+"</div>"));
-
-        var parsedData = parseData(data).split('\n');
-        for (var i = 0; i < parsedData.length; i++) {
-          $('#text').append($("<div>"+parsedData[i]+"</div>"));
-        }
+        renderData(data);
       },
       error: function(error) {
         console.log('error', error);
@@ -23,15 +18,12 @@ var app = {
   }
 } 
 
-//Control
+//Controller
 var sendData = function() {
   var data = $('#data').val();
   app.send(data);
 }
-  //Handlers
-$('#submit').on('click', function() {
-  sendData();
-});
+$('#submit').on('click', sendData);
 
 var getHeaders = function(data) {
   var headers = '';
@@ -44,11 +36,17 @@ var getHeaders = function(data) {
   return headers;
 }
 
+var id = 0;
+
 var parseData = function(data) {
   var csv = '';
 
   for (var prop in data) {
     if (prop !== 'children') {
+      if (data[prop] === null) {
+        id += 1;
+        data[prop] = id;
+      }
       csv += data[prop] + ',';
     }
   }
@@ -64,7 +62,11 @@ var parseData = function(data) {
 }
 
 //View
-// var renderData = function(data) {
+var renderData = function(data) {
+  $('#text').append($("<div>" + getHeaders(data) + "</div>"));
 
-
-// }
+  var parsedData = parseData(data).split('\n');
+  for (var i = 0; i < parsedData.length; i++) {
+    $('#text').append($("<div>" + parsedData[i] + "</div>"));
+  }
+}
