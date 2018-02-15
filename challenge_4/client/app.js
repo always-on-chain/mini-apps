@@ -59,7 +59,7 @@ var increaseFrame = function(rolls, frame) {
   if (rolls === 1) {
     frame++;
   }
-  document.getElementById('frame').innerHTML = 'Frame: ' + frame;
+  document.getElementById('frame').innerHTML = 'Frame: ' + (frame + 1);
   return frame;
 }
 
@@ -69,13 +69,14 @@ var increaseRolls = function(rolls, frame) {
   } else {
     rolls = 0;
   }
-  document.getElementById('rolls').innerHTML = 'Rolls: ' + rolls;
+  document.getElementById('rolls').innerHTML = 'Rolls: ' + (rolls + 1);
   return rolls;
 }
 
 var calculateTotal = function(score) {
-  var total = score.reduce(function(a, b) {
-    return a + b;
+  var total = 0;
+  score.forEach(function(frame) {
+    total += frame[0] + frame[1];
   })
   document.getElementById('total').innerHTML = 'Total Score: ' + total;
   return total;
