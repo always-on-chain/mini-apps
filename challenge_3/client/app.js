@@ -5,6 +5,8 @@ class App extends React.Component {
       board: initializeBoard(),
       playerX: true,
       playerO: false,
+      playerXID: 'X',
+      playerOID: 'O'
     };
   }
 
@@ -17,15 +19,11 @@ class App extends React.Component {
       if (newBoard[i][col] === null) {
         if (this.state.playerX) {
           newBoard[i][col] = 'X';
-          this.checkWinner(i, col)
-          // this.checkRows(i);
-          // this.checkCols(col);
+          this.checkWinner(i, col, this.state.playerXID)
           break;
         } else if (this.state.playerO) {
           newBoard[i][col] = 'O';
-          this.checkWinner(i, col);
-          // this.checkRows(i);
-          // this.checkCols(col);
+          this.checkWinner(i, col, this.state.playerOID);
           break;
         }
       }
@@ -38,18 +36,43 @@ class App extends React.Component {
     })
   }
 
-  checkWinner(row, col) {
+  checkWinner(row, col, player) {
     this.checkRows(row);
     this.checkCols(col);
-    // this.checkDiagonals(row, col);
+    this.checkDiagonals(row, col, player);
   }
 
-  // checkDiagonals(row, col) {
-  //   var countX = 0;
-  //   var countO = 0;
+  checkDiagonals(row, col, player) {
+    var countX = 0;
+    var countO = 0;
+    var colLeft = col;
+    var colRight = col;
 
-  //   for (var i = 0; )
-  // }
+    for (var i = row; i < 6; i++) {
+      colLeft--;
+      colRight++;
+      if (this.state.board[i][colLeft] === player) {
+        if (player === 'X') {
+          countX++;
+          countO = 0;
+          console.log(countX)
+          if (countX === 4) {
+            console.log('Player' + player + 'wins!')
+          }
+        }
+      } else if (this.state.board[i][colRight] === player) {
+        if (player === 'O') {
+          countO++;
+          countX = 0;
+          if (colRight === 4) {
+            console.log('Player' + player + 'wins!')
+          }
+        }
+       
+      }
+    }
+   
+  }
 
   checkRows(row) {
     var countX = 0;
