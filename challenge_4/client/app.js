@@ -7,13 +7,16 @@ class App extends React.Component {
       scoreboard: keepScore(),
       total: 0,
       rolls: 0,
-      frame: 0
+      frame: 0,
+      strike: false,
+      spare: false
     }
   }
 
   knockPins(numberOfPins) {
     var newScore = this.state.scoreboard;
     newScore[this.state.frame][this.state.rolls] = numberOfPins;
+    newScore[this.state.frame][2] = newScore[this.state.frame][0] + newScore[this.state.frame][1];
 
     console.table(newScore);
 
@@ -22,14 +25,13 @@ class App extends React.Component {
       total: calculateTotal(newScore),
       pinsLeft: pinsLeft(this.state.pinsLeft, numberOfPins, this.state.rolls),
       rolls: increaseRolls(this.state.rolls, this.state.frame),
-      frame: increaseFrame(this.state.rolls, this.state.frame)
+      frame: increaseFrame(this.state.rolls, this.state.frame, newScore),
     })
   }
 
   render() {
     return (
       <div id="pins-container"><Pins pins={this.state.pins} knockPins={this.knockPins.bind(this)} /></div>
-      // <table><ScoreBoard  scoreboard={this.state.scoreBoard}/></table>
     );
   };
 }
@@ -55,10 +57,50 @@ var pinsLeft = function(pinsLeft, numberOfPins, rolls) {
   return pins;
 }
 
-var increaseFrame = function(rolls, frame) {
+// var updateScoreboard = function(scoreboard, frame) {
+//   var newScore = this.state.scoreboard;
+//   newScore[this.state.frame][this.state.rolls] = numberOfPins;
+//   newScore[this.state.frame][2] = newScore[this.state.frame][0] + newScore[this.state.frame][1];
+//   if (newScore[frame][0] === 10) {
+//     newScore[frame][3] = 'Strike';
+//   } else if (newScore[frame][0] + scoreboard[frame][1] === 10) {
+//     newScore[frame][3] = 'Spare';
+//   } else {
+//     newScore[frame][3] = 'Open'
+//   }
+//   console.table(newScore)
+// }
+
+var checkForStrikeOrSpare = function(scoreboard, frame) {
+  if (scoreboard[frame][0] === 10) {
+    scoreboard[frame][3] = 'Strike';
+  } else if (scoreboard[frame][0] + scoreboard[frame][1] === 10) {
+    scoreboard[frame][3] = 'Spare';
+  } else {
+    scoreboard[frame][3] = 'Open'
+  }
+}
+
+var increaseFrame = function(rolls, frame, scoreboard) {
+  if (frame > 0 && rolls === 1) {
+    if (scoreboard[frame - 1][3] === 'Strike') {
+      console.log('strike', frame)
+      // if (scoreboard[frame][3] === 'Strike') {
+
+      // } else if (scoreboard[frame][3] === 'Spare') {
+
+      // }
+      scoreboard[frame - 1][2] += scoreboard[frame][0] + scoreboard[frame][1];
+    } else if (scoreboard[frame - 1][3] === 'Spare') {
+      console.log('spare', frame)
+      scoreboard[frame - 1][2] += scoreboard[frame][0];
+    }
+  }
   if (rolls === 1) {
+    checkForStrikeOrSpare(scoreboard, frame);
     frame++;
   }
+  
   document.getElementById('frame').innerHTML = 'Frame: ' + (frame + 1);
   return frame;
 }
@@ -76,7 +118,7 @@ var increaseRolls = function(rolls, frame) {
 var calculateTotal = function(score) {
   var total = 0;
   score.forEach(function(frame) {
-    total += frame[0] + frame[1];
+    total += frame[2];
   })
   document.getElementById('total').innerHTML = 'Total Score: ' + total;
   return total;
@@ -84,16 +126,16 @@ var calculateTotal = function(score) {
 
 var keepScore = function() {
   var score = [
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
-    [null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
+    [null, null, null, null],
   ]
   return score;
 }
