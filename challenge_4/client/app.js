@@ -85,12 +85,11 @@ var increaseFrame = function(rolls, frame, scoreboard) {
   if (frame > 0 && rolls === 1) {
     if (scoreboard[frame - 1][3] === 'Strike') {
       console.log('strike', frame)
-      // if (scoreboard[frame][3] === 'Strike') {
-
-      // } else if (scoreboard[frame][3] === 'Spare') {
-
-      // }
-      scoreboard[frame - 1][2] += scoreboard[frame][0] + scoreboard[frame][1];
+      if (scoreboard[frame][0] === 10) {
+        scoreboard[frame - 1][2] += scoreboard[frame - 1][2] + scoreboard[frame][2];
+      } else {
+        scoreboard[frame - 1][2] += scoreboard[frame][0] + scoreboard[frame][1];
+      }
     } else if (scoreboard[frame - 1][3] === 'Spare') {
       console.log('spare', frame)
       scoreboard[frame - 1][2] += scoreboard[frame][0];
