@@ -31,7 +31,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id="pins-container"><Pins pins={this.state.pins} knockPins={this.knockPins.bind(this)} /></div>
+      <div id="pins-container"> 
+        <Pins pins={this.state.pins} knockPins={this.knockPins.bind(this)} /> 
+        <table id="score-board"> <Scoreboard scoreboard={this.state.scoreboard} /></table>
+      </div>
     );
   };
 }

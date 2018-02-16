@@ -14,6 +14,18 @@ var Pin = function(props) {
   );
 }
 
-// var Scoreboard = function(props) {
-  
-// }
+var Scoreboard = function(props) {
+  return (
+    props.scoreboard.map(function(row) {
+      return <tr>{(row.map(function(cell) {
+        return <ScoreCell scorecell={cell} />
+      }))}</tr>
+    })
+  )
+};
+
+var ScoreCell = function(props) {
+  return (
+    <td> {props.scorecell}</td>
+  )
+};
