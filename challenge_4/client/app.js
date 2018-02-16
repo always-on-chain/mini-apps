@@ -22,10 +22,10 @@ class App extends React.Component {
 
     this.setState({
       scoreboard: newScore,
-      total: calculateTotal(newScore),
-      pinsLeft: pinsLeft(this.state.pinsLeft, numberOfPins, this.state.rolls),
+      total: calculateTotal(newScore, this.state.frame),
+      pinsLeft: pinsLeft(this.state.pinsLeft, numberOfPins, this.state.rolls, this.state.frame),
       rolls: increaseRolls(this.state.rolls, this.state.frame),
-      frame: increaseFrame(this.state.rolls, this.state.frame, newScore),
+      frame: increaseFrame(this.state.rolls, this.state.frame, newScore, numberOfPins),
     })
   }
 
@@ -36,40 +36,28 @@ class App extends React.Component {
   };
 }
 
-var pinsLeft = function(pinsLeft, numberOfPins, rolls) {
+var pinsLeft = function(pinsLeft, numberOfPins, rolls, frame) {
   var pins;
   var pinElements = document.getElementById('pins-container').childNodes;
 
-  if (rolls === 1) {
-    pins = 10;
-    for (var i = 0; i < pinElements.length; i++) {
-      $('#' + i).show();
-    }
-  } else {
-    pins = pinsLeft - numberOfPins;
-    for (var i = 0; i < pinElements.length; i++) {
-      if (i > pins) {
-        $('#' + i).hide();
+  if (frame < 9) {
+    if (rolls === 1) {
+      pins = 10;
+      for (var i = 0; i < pinElements.length; i++) {
+        $('#' + i).show();
       }
-    } 
+    } else {
+      pins = pinsLeft - numberOfPins;
+      for (var i = 0; i < pinElements.length; i++) {
+        if (i > pins) {
+          $('#' + i).hide();
+        }
+      } 
+    }
   }
   document.getElementById('pins-left').innerHTML = 'Pins left: ' + pins;
   return pins;
 }
-
-// var updateScoreboard = function(scoreboard, frame) {
-//   var newScore = this.state.scoreboard;
-//   newScore[this.state.frame][this.state.rolls] = numberOfPins;
-//   newScore[this.state.frame][2] = newScore[this.state.frame][0] + newScore[this.state.frame][1];
-//   if (newScore[frame][0] === 10) {
-//     newScore[frame][3] = 'Strike';
-//   } else if (newScore[frame][0] + scoreboard[frame][1] === 10) {
-//     newScore[frame][3] = 'Spare';
-//   } else {
-//     newScore[frame][3] = 'Open'
-//   }
-//   console.table(newScore)
-// }
 
 var checkForStrikeOrSpare = function(scoreboard, frame) {
   if (scoreboard[frame][0] === 10) {
@@ -81,28 +69,39 @@ var checkForStrikeOrSpare = function(scoreboard, frame) {
   }
 }
 
-var increaseFrame = function(rolls, frame, scoreboard) {
-  if (frame > 0 && rolls === 1) {
+var increaseFrame = function(rolls, frame, scoreboard, numberOfPins) {
+  if (frame > 0 && frame < 9 && rolls === 1) {
     if (scoreboard[frame - 1][3] === 'Strike') {
-      console.log('strike', frame)
       if (scoreboard[frame][0] === 10) {
         scoreboard[frame - 1][2] += scoreboard[frame - 1][2] + scoreboard[frame][2];
       } else {
         scoreboard[frame - 1][2] += scoreboard[frame][0] + scoreboard[frame][1];
       }
     } else if (scoreboard[frame - 1][3] === 'Spare') {
-      console.log('spare', frame)
       scoreboard[frame - 1][2] += scoreboard[frame][0];
     }
   }
+  
+  if (frame === 9) {
+    if (scoreboard[frame - 1][3] === 'Strike' && scoreboard[frame - 1][2] < 30) {
+      scoreboard[frame - 1][2] += 20;
+    }
+    if (scoreboard[frame][0] === 10 && scoreboard[frame][1] === 10) {
+      scoreboard[frame][2] += numberOfPins;
+    }
+  }
+
   if (rolls === 1) {
-    checkForStrikeOrSpare(scoreboard, frame);
-    frame++;
+    if (frame < 9) {
+      checkForStrikeOrSpare(scoreboard, frame);
+      frame++;
+    }
   }
   
   document.getElementById('frame').innerHTML = 'Frame: ' + (frame + 1);
   return frame;
 }
+
 
 var increaseRolls = function(rolls, frame) {
   if (rolls === 0) {
